@@ -13,6 +13,9 @@ import br.com.fiap.estoque.modelo.item.Filtros;
 import br.com.fiap.estoque.modelo.item.Item;
 import br.com.fiap.estoque.modelo.item.ItemDao;
 import br.com.fiap.estoque.modelo.item.ListaItens;
+import br.com.fiap.estoque.modelo.usuario.AutorizacaoException;
+import br.com.fiap.estoque.modelo.usuario.TokenDao;
+import br.com.fiap.estoque.modelo.usuario.TokenUsuario;
 
 @WebService
 public class EstoqueWS {
@@ -31,8 +34,16 @@ public class EstoqueWS {
 	
 	@WebMethod(operationName = "CadastrarItem")
 	@WebResult(name="item")
-	public Item cadastrarItem(@WebParam(name = "item") Item item) {
-		System.out.println("Cadastrando item " + item);
+	public Item cadastrarItem(@WebParam(name="tokenUsuario", header=true) TokenUsuario token, 
+			@WebParam(name="item") Item item) throws AutorizacaoException {
+		
+		boolean valido = new TokenDao().ehValido(token);
+		
+		if(!valido) {
+			throw new AutorizacaoException("Token inválido.");
+		}
+		
+		System.out.println("Cadastrando " + item + ", " + token);
 		this.dao.cadastrar(item);
 		return item;
 	}
