@@ -27,8 +27,8 @@ public class CarrinhoTest {
 	
 	@Test
 	public void testeDeConsultaDoCarrinho() {
-		String conteudo = this.target.path("/carrinhos/1").request().get(String.class);
-		Assert.assertTrue(conteudo.contains("Lins de Vasconcelos"));
+		Carrinho carrinho = this.target.path("/carrinhos/1").request().get(Carrinho.class);
+		Assert.assertTrue(carrinho.getRua().contains("Lins de Vasconcelos"));
 	}
 	
 	@Test
@@ -38,16 +38,14 @@ public class CarrinhoTest {
 		carrinho.setRua("Avenida Lins de Vasconcelos 1222, 10 andar");
 		carrinho.setCidade("São Paulo");
 		
-		String xml = carrinho.toXML();
-		
-		Entity<String> entity = Entity.entity(xml, MediaType.APPLICATION_XML);
+		Entity<Carrinho> entity = Entity.entity(carrinho, MediaType.APPLICATION_JSON);
 		
 		Response resp = target.path("/carrinhos").request().post(entity);
 		Assert.assertEquals(201, resp.getStatus());
 		
 		String location = resp.getHeaderString("Location");
-		String conteudo = client.target(location).request().get(String.class);
-		Assert.assertTrue(conteudo.contains(carrinho.getProdutos().get(0).getNome()));
+		Carrinho carrinhoResposta = client.target(location).request().get(Carrinho.class);
+		Assert.assertEquals(carrinhoResposta.getProdutos().get(0).getNome(), carrinho.getProdutos().get(0).getNome());
 	}
 	
 	@Test
@@ -55,8 +53,24 @@ public class CarrinhoTest {
 		Response resp = target.path("carrinhos/1/produto/6924").request().delete();
 		Assert.assertEquals(200, resp.getStatus());
 		
-		String conteudo = target.path("carrinhos/1").request().get(String.class);
-		Assert.assertFalse(conteudo.contains("Notebook"));
+		Carrinho carrinho = target.path("carrinhos/1").request().get(Carrinho.class);
+		Assert.assertEquals(1, carrinho.getProdutos().size());
+	}
+	
+	@Test
+	public void testeAtualizacaoQuantidadeProduto() {
+		Carrinho carrinho = this.target.path("/carrinhos/1").request().get(Carrinho.class);
+				
+		Produto produto = (Produto) carrinho.getProdutos().stream().filter(p -> p.getId() == 6924l).toArray()[0];
+		produto.setQuantidade(10);
+		
+		Entity<Produto> entity = Entity.entity(produto, MediaType.APPLICATION_JSON);
+		
+		Response resp = target.path("carrinhos/1/produto/6924/quantidade").request().put(entity);
+		Assert.assertEquals(200, resp.getStatus());
+		
+		carrinho = this.target.path("/carrinhos/1").request().get(Carrinho.class);
+		Assert.assertEquals(10, carrinho.getProdutos().get(0).getQuantidade());
 	}
 }
 

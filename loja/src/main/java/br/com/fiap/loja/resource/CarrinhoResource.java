@@ -13,8 +13,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.thoughtworks.xstream.XStream;
-
 import br.com.fiap.loja.dao.CarrinhoDAO;
 import br.com.fiap.loja.model.Carrinho;
 import br.com.fiap.loja.model.Produto;
@@ -24,17 +22,16 @@ public class CarrinhoResource {
 	
 	@Path("/{id}")
 	@GET
-	@Produces(MediaType.APPLICATION_XML)
-	public String busca( @PathParam("id") long id) {
+	@Produces(MediaType.APPLICATION_JSON)
+	public Carrinho busca( @PathParam("id") long id) {
 		Carrinho carrinho = new CarrinhoDAO().busca(id);
-		return carrinho.toXML();
+		return carrinho;
 	}
 
 	@POST
-	@Consumes(MediaType.APPLICATION_XML)
-	@Produces(MediaType.APPLICATION_XML)
-	public Response adiciona(String conteudo) {
-		Carrinho carrinho = (Carrinho) new XStream().fromXML(conteudo);
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response adiciona(Carrinho carrinho) {
 		new CarrinhoDAO().adiciona(carrinho);
 		URI uri = URI.create("/loja/carrinhos/" + carrinho.getId());
 		
@@ -50,13 +47,12 @@ public class CarrinhoResource {
 		return Response.ok().build();
 	}
 	
-	@Path("/{id}/produto/{produtoId}")
+	@Path("/{id}/produto/{produtoId}/quantidade")
 	@PUT
-	@Consumes(MediaType.APPLICATION_XML)
-	public Response atualizaProduto(@PathParam("id") long id, @PathParam("produtoId") long produtoId, String conteudo) {
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response atualizaProduto(@PathParam("id") long id, @PathParam("produtoId") long produtoId, Produto produto) {
 		Carrinho carrinho = new CarrinhoDAO().busca(id);
-		Produto produto = (Produto) new XStream().fromXML(conteudo);
-		carrinho.troca(produto);
+		carrinho.trocaQuantidade(produto);
 		return Response.ok().build();
 	}
 }
