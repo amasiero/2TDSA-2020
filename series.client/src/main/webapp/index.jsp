@@ -17,7 +17,13 @@
 		<jsp:useBean id="service" scope="page" class="br.com.fiap.series.client.service.SerieService" />
 		<ul class="list-group">
 			<c:forEach var="serie" items="${service.series}">
-				<li class="list-group-item">${serie.nome}</li>
+				<li class="list-group-item d-flex justify-content-between">
+					${serie.nome}
+					<a href="serie?id=${serie.id}" class="btn btn-danger">
+						<i class="fas fa-trash-alt mr-2"></i>
+						Excluir
+					</a>
+				</li>
 			</c:forEach>
 		</ul>
 		<div class="d-flex justify-content-end">
