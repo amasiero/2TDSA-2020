@@ -16,7 +16,7 @@ public class AtualizaSerieServlet extends HttpServlet {
 	private static final long serialVersionUID = -2130863823970544489L;
 
 	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		Long id = Long.parseLong(req.getParameter("id"));
 		String nome = req.getParameter("nome");
 		Serie serie = new Serie(nome);
@@ -27,6 +27,6 @@ public class AtualizaSerieServlet extends HttpServlet {
 			e.printStackTrace();
 		}
 		
-		req.getRequestDispatcher("index.jsp").forward(req, resp);
+		// req.getRequestDispatcher("index.jsp").forward(req, resp);
 	}
 }

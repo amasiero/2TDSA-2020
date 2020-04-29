@@ -18,10 +18,17 @@
 		<ul class="list-group">
 			<c:forEach var="serie" items="${service.series}">
 				<li class="list-group-item d-flex justify-content-between">
-					${serie.nome}
-					
+					<span id="nome-serie-${serie.id}">${serie.nome}</span>
+					<div id="input-serie-${serie.id}" class="input-group w-50" hidden>
+						<input type="text" class="form-control" value="${serie.nome}" />
+						<div class="input-group-append">
+							<button class="btn btn-success" onclick="editarSerie(${serie.id})">
+								<i class="fas fa-check-square"></i>
+							</button>
+						</div>
+					</div>
 					<span class="d-flex">
-						<a href="editar.jsp?id=${serie.id}" class="btn btn-info mr-2">
+						<a href="#" onclick="toggleInput(${serie.id})" class="btn btn-info mr-2">
 							<i class="fas fa-edit"></i>
 						</a>
 						<a href="serie?id=${serie.id}" class="btn btn-danger">
@@ -35,5 +42,35 @@
 			<a href="adiciona.jsp" class="btn btn-primary mt-3"><i class="fas fa-plus-circle mr-2"></i>Adicionar</a>
 		</div>
 	</div>
+	<script>
+		function toggleInput(serieId) {
+			
+			const nomeSerieEl = document.getElementById(`nome-serie-\${serieId}`);
+			const inputSerieEl = document.getElementById(`input-serie-\${serieId}`);
+			
+			if(nomeSerieEl.hasAttribute('hidden')) {
+				nomeSerieEl.removeAttribute('hidden');
+				inputSerieEl.hidden = true;
+			} else {
+				inputSerieEl.removeAttribute('hidden');
+				nomeSerieEl.hidden = true;
+			}
+		}
+		
+		function editarSerie(serieId) {
+			let formData = new FormData();
+			
+			const nome = document.querySelector(`#input-serie-\${serieId} > input`).value;
+			
+			formData.append('id', serieId);
+			formData.append('nome', nome);
+			
+			fetch(`atualiza?id=\${serieId}&nome=\${nome}`)
+			.then(_ => {
+				toggleInput(serieId);
+				document.getElementById(`nome-serie-\${serieId}`).textContent = nome;
+			});
+		}
+	</script>
 </body>
 </html>
