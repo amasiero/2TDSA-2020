@@ -35,6 +35,14 @@ public class SerieResource {
 		return series;
 	}
 	
+	@Path("/serie/{id}")
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Serie busca(@PathParam("id") Long id) {
+		Serie serie = new SerieDAO().buscaPorId(id);
+		return serie;
+	}
+	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -44,12 +52,12 @@ public class SerieResource {
 		return Response.created(uri).build();
 	}
 	
-	@Path("/{id}/{nome}")
 	@PUT
+	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response atualiza(@PathParam("id") Long id, @PathParam("nome") String nome) {
-		Serie serie = new SerieDAO().buscaPorId(id);
-		serie.setNome(nome);
+	public Response atualiza(Serie value) {
+		Serie serie = new SerieDAO().buscaPorId(value.getId());
+		serie.setNome(value.getNome());
 		return Response.ok().build();
 	}
 	

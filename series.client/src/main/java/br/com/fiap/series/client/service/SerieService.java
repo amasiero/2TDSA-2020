@@ -26,13 +26,25 @@ public class SerieService {
 		return series;
 	}
 	
+	public Serie busca(Long id) {
+		Serie serie = this.target.path("/series/serie/" + id).request().get(Serie.class);
+		return serie;
+	}
+	
 	public void adiciona(Serie serie) throws Exception {
 		Entity<Serie> entity = Entity.entity(serie, MediaType.APPLICATION_JSON);
 		Response resp = this.target.path("/series").request().post(entity);
 		if(resp.getStatus() != 201) throw new Exception("Ocorreu um problema ao criar a série");
 	}
 	
-	public void excluir(Long id) {
-		// Chamada para o delete do serviço
+	public void excluir(Long id) throws Exception {
+		Response resp = this.target.path("/series/" + id).request().delete();
+		if(resp.getStatus() != 200) throw new Exception("Ocorreu um problema ao excluir a série");
+	}
+	
+	public void atualiza(Serie serie) throws Exception {
+		Entity<Serie> entity = Entity.entity(serie, MediaType.APPLICATION_JSON);
+		Response resp = this.target.path("/series").request().put(entity);
+		if(resp.getStatus() != 200) throw new Exception("Ocorreu um problema ao atualizar a série");
 	}
 }

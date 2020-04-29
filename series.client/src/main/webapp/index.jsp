@@ -19,10 +19,15 @@
 			<c:forEach var="serie" items="${service.series}">
 				<li class="list-group-item d-flex justify-content-between">
 					${serie.nome}
-					<a href="serie?id=${serie.id}" class="btn btn-danger">
-						<i class="fas fa-trash-alt mr-2"></i>
-						Excluir
-					</a>
+					
+					<span class="d-flex">
+						<a href="editar.jsp?id=${serie.id}" class="btn btn-info mr-2">
+							<i class="fas fa-edit"></i>
+						</a>
+						<a href="serie?id=${serie.id}" class="btn btn-danger">
+							<i class="fas fa-trash-alt"></i>
+						</a>
+					</span>
 				</li>
 			</c:forEach>
 		</ul>
