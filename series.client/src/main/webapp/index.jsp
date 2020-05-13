@@ -65,11 +65,18 @@
 			formData.append('id', serieId);
 			formData.append('nome', nome);
 			
-			fetch(`atualiza?id=\${serieId}&nome=\${nome}`)
+			fetch('atualiza', {
+				method: 'POST',
+				headers: {
+					'Content-type': 'application/x-www-form-urlencoded'
+				},
+				body: formData
+			})
 			.then(_ => {
 				toggleInput(serieId);
 				document.getElementById(`nome-serie-\${serieId}`).textContent = nome;
-			});
+			})
+			.catch(e => console.log(e));
 		}
 	</script>
 </body>
