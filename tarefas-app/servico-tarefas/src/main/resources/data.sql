@@ -1,0 +1,3 @@
+INSERT INTO TAREFA(codigo, descricao, feita, data_limite, criada_em, ultima_atualizacao) VALUES (SQ_TAREFA.nextval, 'Estudar spring data', FALSE, '2020-08-31', '2020-08-05', '2020-08-05');
+INSERT INTO TAREFA(codigo, descricao, feita, data_limite, criada_em, ultima_atualizacao) VALUES (SQ_TAREFA.nextval, 'Implementar web site', FALSE, '2020-08-31', '2020-08-05', '2020-08-05');
+INSERT INTO TAREFA(codigo, descricao, feita, data_limite, criada_em, ultima_atualizacao) VALUES (SQ_TAREFA.nextval, 'Pagar conta de luz', FALSE, '2020-08-31', '2020-08-05', '2020-08-05');
