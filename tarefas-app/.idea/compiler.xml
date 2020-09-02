@@ -6,16 +6,19 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="tarefas-site" />
         <module name="servico-tarefas" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="servico-tarefas" target="11" />
+      <module name="tarefas-site" target="14" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="servico-tarefas" options="-parameters" />
+      <module name="tarefas-site" options="-parameters" />
     </option>
   </component>
 </project>
