@@ -5,6 +5,7 @@
     <title>Lista de Tarefas</title>
     <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet"/>
     <link th:href="@{/webjars/font-awesome/css/font-awesome.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/main.css}" rel="stylesheet" />
 </head>
 <body>
 <nav class="navbar navbar-dark bg-dark">
@@ -29,22 +30,49 @@
     <h2>Lista de Tarefas</h2>
     <ul class="list-group mt-3">
         <li th:each="tarefa:${tarefas}" class="list-group-item d-flex justify-content-between align-items-center">
-            <p th:text="${tarefa.descricao}"></p>
+            <p th:text="${tarefa.descricao}" th:class="${tarefa.feita ? 'done' : ''}"></p>
             <div>
-                <a th:if="${!tarefa.feita}" th:href="@{/tarefas/feita} + ${tarefa.codigo}" class="btn btn-success mr-2">
+                <a th:if="${!tarefa.feita}" th:href="@{/tarefas/feita/} + ${tarefa.codigo}" class="btn btn-success mr-2">
                     <i class="fa fa-check"></i>
                 </a>
-                <button type="button" class="btn btn-danger">
+                <a th:if="${tarefa.feita}" th:href="@{/tarefas/feita/} + ${tarefa.codigo}" class="btn btn-warning mr-2">
+                    <i class="fa fa-undo"></i>
+                </a>
+                <button th:onclick="|tarefaId.value = ${tarefa.codigo}|" type="button"
+                        class="btn btn-danger" data-toggle="modal" data-target="#modal">
                     <i class="fa fa-trash"></i>
                 </button>
             </div>
         </li>
     </ul>
 </div>
+
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel">Deseja confirmar a exclusão da tarefa?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/tarefas/excluir}" method="post">
+                    <input type="hidden" name="codigo" id="tarefaId">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-danger">Confirmar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 <footer class="bg-dark text-light fixed-bottom p-4">
     <div class="d-flex justify-content-center container">
         Developed with <span class="text-danger mr-2 ml-2 font-weight-bold">&hearts;</span> by Andrey Masiero &copy; 2020
     </div>
 </footer>
+
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 </body>
 </html>
